@@ -1,0 +1,47 @@
+# Changing window focus
+
+cmd + ctrl - j : yabai -m window --focus south
+cmd + ctrl - k : yabai -m window --focus north
+cmd + ctrl - h : yabai -m window --focus west
+cmd + ctrl - l : yabai -m window --focus east
+
+# Swapping the windows
+
+cmd + ctrl + shift - j : yabai -m window --swap south
+cmd + ctrl + shift - k : yabai -m window --swap north
+cmd + ctrl + shift - h : yabai -m window --swap west
+cmd + ctrl + shift - l : yabai -m window --swap east
+
+# Toggle window float
+
+cmd + ctrl - e : yabai -m window --toggle float --grid 4:4:1:1:2:2
+
+# Flip the layout
+
+cmd + ctrl - y : yabai -m space --mirror y-axis
+
+# Change focus between displays 
+
+cmd + ctrl - m : yabai -m display --focus south
+cmd + ctrl - n : yabai -m display --focus north
+
+# Move windows between displays 
+
+cmd + ctrl + shift - m : yabai -m window --display south; yabai -m display --focus south
+cmd + ctrl + shift - n : yabai -m window --display north; yabai -m display --focus north
+
+# Maximize the window
+
+cmd + ctrl - u : yabai -m window --toggle zoom-fullscreen
+
+# Show desktop
+
+cmd + ctrl -o : yabai -m space --toggle show-desktop
+
+# Rebalance the windows
+
+cmd + ctrl - i : yabai -m space --balance
+
+# Start/stop yabai
+cmd + ctrl - z : yabai --start-service
+cmd + ctrl - x : yabai --stop-service
