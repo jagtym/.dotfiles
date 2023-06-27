@@ -1,49 +1,85 @@
 vim.g.mapleader = " "
 
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
-    lazypath,
-  })
+-- packer bootstrap
+--
+--
+local ensure_packer = function()
+  local fn = vim.fn
+  local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+  if fn.empty(fn.glob(install_path)) > 0 then
+    fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+    vim.cmd [[packadd packer.nvim]]
+    return true
+  end
+  return false
 end
-vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup({
-  { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
-  "cohama/lexima.vim",
-  "connorholyday/vim-snazzy",
-  "folke/which-key.nvim",
-  "neovim/nvim-lspconfig",
-  "simrat39/rust-tools.nvim",
-  "mfussenegger/nvim-dap",
-  "glepnir/lspsaga.nvim",
+local packer_bootstrap = ensure_packer()
+
+require('packer').startup(function(use)
+  use 'wbthomason/packer.nvim'
+  -- My plugins here
+  -- use 'foo1/bar1.nvim'
+  -- use 'foo2/bar2.nvim'
+
+  -- Automatically set up your configuration after cloning packer.nvim
+  -- Put this at the end after all plugins
+  if packer_bootstrap then
+    require('packer').sync()
+  end
+end)
+
+-- packer package management
+--
+--
+
+vim.cmd [[packadd packer.nvim]]
+
+require'packer'.startup(function(use)
+    use "wbthomason/packer.nvim"
+    use { "catppuccin/nvim", as = "catppuccin" }
+    use "cohama/lexima.vim"
+    use "connorholyday/vim-snazzy"
+    use "folke/which-key.nvim"
+    use "neovim/nvim-lspconfig"
+    use "simrat39/rust-tools.nvim"
+    use "mfussenegger/nvim-dap" 
+    use({
+    "glepnir/lspsaga.nvim",
+    opt = true,
+    branch = "main",
     event = "LspAttach",
-    config = function()
+    config = (function()
         require("lspsaga").setup({})
-    end,
-    dependencies = {
-      {"nvim-tree/nvim-web-devicons"},
-      --Please make sure you install markdown and markdown_inline parser
-      {"nvim-treesitter/nvim-treesitter"}
-    },
-  {"nvim-treesitter/nvim-treesitter", build = ":TSUpdate"},
-  {
-    "williamboman/mason.nvim",
-    "williamboman/mason-lspconfig.nvim",
-  },
-  {
-    'nvim-telescope/telescope.nvim', tag = '0.1.1',
-      dependencies = { 'nvim-lua/plenary.nvim' }
-  }
-})
+    end),
+    requires = {
+            {"nvim-tree/nvim-web-devicons"},
+            --Please make sure you install markdown and markdown_inline parser
+            {"nvim-treesitter/nvim-treesitter"}
+        }
+    })
+    use {
+        "nvim-treesitter/nvim-treesitter",
+        run = ":TSUpdate"
+    }
+    use {
+        "williamboman/mason.nvim",
+        run = ":MasonUpdate" -- :MasonUpdate updates registry contents
+    }
+    use {
+        "williamboman/mason-lspconfig.nvim",
+        "neovim/nvim-lspconfig",
+    }
+    use {
+      'nvim-telescope/telescope.nvim', tag = '0.1.1',
+      requires = { {'nvim-lua/plenary.nvim'} }
+    }
+end)
 
+-- setups 
+--
+--
 require'nvim-treesitter.configs'.setup {
-  -- A list of parser names, or "all" (the five listed parsers should always be installed)
   ensure_installed = { "c", "rust", "cpp", "lua", "vim", "vimdoc", "query" },
 
   -- Install parsers synchronously (only applied to `ensure_installed`)
@@ -113,6 +149,9 @@ rt.setup({
   }
 })
 
+-- editor config
+--
+--
 require("mason").setup()
 require("mason-lspconfig").setup()
 
