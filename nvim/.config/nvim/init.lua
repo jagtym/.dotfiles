@@ -120,6 +120,7 @@ require'nvim-treesitter.configs'.setup {
 }
 
 local lspconfig = require('lspconfig')
+local util = require('lspconfig/util')
 lspconfig.pyright.setup {}
 lspconfig.tsserver.setup {}
 lspconfig.rust_analyzer.setup {
@@ -130,6 +131,18 @@ lspconfig.rust_analyzer.setup {
   },
 }
 
+lspconfig.gopls.setup {
+    on_attach = on_attach,
+    capabilities = capabilities,
+    cmd = {"gopls"},
+    filetypes = {"go", "gomod", "gowork", "gotmpl"},
+    root_dir = util.root_pattern("go.work", "go.mod", ".git"),
+    settings = {
+        gopls = {
+            completeUnimported = true,
+        }
+    }
+}
 
 local rt = require("rust-tools")
 
