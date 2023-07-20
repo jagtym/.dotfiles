@@ -101,6 +101,8 @@ require('lazy').setup({
 
       -- Adds LSP completion capabilities
       'hrsh7th/cmp-nvim-lsp',
+      -- Add buffer completion
+      'hrsh7th/cmp-buffer',
 
       -- Adds a number of user-friendly snippets
       'rafamadriz/friendly-snippets',
@@ -203,7 +205,7 @@ require('lazy').setup({
   --    Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --
   --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
 }, {})
 
 -- [[ Setting options ]]
@@ -432,7 +434,7 @@ end
 --  the `settings` field of the server config. You must look up that documentation yourself.
 local servers = {
   -- clangd = {},
-  -- gopls = {},
+  gopls = {},
   -- pyright = {},
   -- rust_analyzer = {},
   -- tsserver = {},
@@ -514,7 +516,19 @@ cmp.setup {
   sources = {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
-  },
+  }, {
+      { name = 'buffer' },
+  }
+}
+
+local util = require('lspconfig/util')
+require('lspconfig')['gopls'].setup {
+  capabilities = capabilities,
+  on_attach = on_attach,
+  cmd = {"gopls"},
+  filetypes = { "go", "gomod", "gowork", "gotmpl" },
+  root_dir = util.root_pattern("go.work", "go.mod", ".git"),
+  settings = servers['gopls']
 }
 
 -- The line beneath this is called `modeline`. See `:help modeline`
