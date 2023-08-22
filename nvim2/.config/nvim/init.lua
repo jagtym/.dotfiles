@@ -97,6 +97,9 @@ require('lazy').setup({
     dependencies = {
       -- Adds LSP completion capabilities
       'hrsh7th/cmp-nvim-lsp',
+      'nvim-lspconfig',
+      'hrsh7th/cmp-path',
+      'hrsh7th/cmp-cmdline',
       -- Snippet Engine & its associated nvim-cmp source
       'L3MON4D3/LuaSnip',
       'saadparwaiz1/cmp_luasnip',
@@ -132,14 +135,32 @@ require('lazy').setup({
     },
   },
 
+  -- {
+  --   -- Theme inspired by Atom
+  --   'navarasu/onedark.nvim',
+  --   priority = 1000,
+  --   config = function()
+  --     vim.cmd.colorscheme 'onedark'
+  --   end,
+  -- },
   {
-    -- Theme inspired by Atom
-    'navarasu/onedark.nvim',
+    'maxmx03/solarized.nvim',
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'onedark'
+      vim.cmd.colorscheme 'solarized'
+      vim.cmd.highlight 'Linenr guibg=none'
+      vim.cmd.highlight 'SignColumn guibg=none'
     end,
   },
+
+  -- {
+  --   -- Theme inspired by Atom
+  --   'JoosepAlviste/palenightfall.nvim',
+  --   priority = 1000,
+  --   config = function()
+  --     vim.cmd.colorscheme 'palenightfall'
+  --   end,
+  -- },
 
   {
     -- Set lualine as statusline
@@ -148,7 +169,7 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'onedark',
+        theme = 'solarized_dark',
         component_separators = '|',
         section_separators = '',
       },
@@ -521,16 +542,15 @@ cmp.setup {
   },
 }
 
-local util = require('lspconfig/util')
-require('lspconfig')['gopls'].
-    setup {
-      capabilities = capabilities,
-      cmd = { "gopls" },
-      filetypes = { "go", "gomod", "gowork", "gotmpl" },
-      root_dir = util.root_pattern("go.work", "go.mod", ".git"),
-      settings = servers['gopls']
-    }
-
+-- local util = require('lspconfig/util')
+-- require('lspconfig')['gopls'].
+--     setup {
+--       capabilities = capabilities,
+--       cmd = { "gopls" },
+--       filetypes = { "go", "gomod", "gowork", "gotmpl" },
+--       root_dir = util.root_pattern("go.work", "go.mod", ".git"),
+--       settings = servers['gopls']
+--     }
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
