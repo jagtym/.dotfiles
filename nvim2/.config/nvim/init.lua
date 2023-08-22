@@ -41,6 +41,9 @@ P.S. You can delete this when you're done too. It's your config now :)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+vim.keymap.set('n', '<C-d>', '<C-d>zz')
+vim.keymap.set('n', '<C-u>', '<C-u>zz')
+
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
@@ -542,15 +545,16 @@ cmp.setup {
   },
 }
 
--- local util = require('lspconfig/util')
--- require('lspconfig')['gopls'].
---     setup {
---       capabilities = capabilities,
---       cmd = { "gopls" },
---       filetypes = { "go", "gomod", "gowork", "gotmpl" },
---       root_dir = util.root_pattern("go.work", "go.mod", ".git"),
---       settings = servers['gopls']
---     }
+local util = require('lspconfig/util')
+require('lspconfig')['gopls'].
+    setup {
+      capabilities = capabilities,
+      on_attach = on_attach,
+      cmd = { "gopls" },
+      filetypes = { "go", "gomod", "gowork", "gotmpl" },
+      root_dir = util.root_pattern("go.work", "go.mod", ".git"),
+      settings = servers['gopls']
+    }
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
