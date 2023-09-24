@@ -43,6 +43,7 @@ vim.g.maplocalleader = ' '
 
 vim.keymap.set('n', '<C-d>', '<C-d>zz')
 vim.keymap.set('n', '<C-u>', '<C-u>zz')
+vim.keymap.set('n', '<leader>ef', ':Ex<CR>')
 
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
